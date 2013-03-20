@@ -928,11 +928,10 @@ struct arguments_t *readArguments() {
 		if(addr == 0) { 
 			exit(1);
 		}
-	addr[0]='#'; 		
+		addr[0]='#';
+		msync(addr,sizeof(int),MS_SYNC|MS_INVALIDATE);
 	}
-	
-	msync(addr,sizeof(int),MS_SYNC|MS_INVALIDATE);
-	
+
 	for (i=0; i<=mlength; i++) {
 		if(addr[i] == '#') {
 			break;
