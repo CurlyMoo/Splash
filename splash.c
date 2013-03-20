@@ -18,6 +18,8 @@ with Splash. If not, see <http://www.gnu.org/licenses/>
 
 Various functions used in Splash are derived from fbi (Gerd Hoffmann <gerd@kraxel.org>)
 
+sudo apt-get install gcc uthash-dev
+
 gcc splash.c -lm -o splash /usr/lib/arm-linux-gnueabihf/libjpeg.a /usr/lib/arm-linux-gnueabihf/libfreetype.a /usr/lib/arm-linux-gnueabihf/libz.a -I/usr/include/freetype2/
 */
 
@@ -115,8 +117,8 @@ int REDRAW=0;
 //Paths relative to /usr/bin/splash
 char *BARIMG="../../share/images/splash/progressbar.jpg";
 char *FONT="../../share/fonts/splash/Comfortaa-Light.ttf";
-char MEMORY[255]="../../../var/";
-char PID[255]="../../../var/";
+char MEMORY[255]="../../../run/";
+char PID[255]="../../../run/";
 
 char *MSGTXT="loading...";
 int FONTSIZE=32;
@@ -926,11 +928,10 @@ struct arguments_t *readArguments() {
 		if(addr == 0) { 
 			exit(1);
 		}
-	addr[0]='#'; 		
+		addr[0]='#';
+		msync(addr,sizeof(int),MS_SYNC|MS_INVALIDATE);
 	}
-	
-	msync(addr,sizeof(int),MS_SYNC|MS_INVALIDATE);
-	
+
 	for (i=0; i<=mlength; i++) {
 		if(addr[i] == '#') {
 			break;
