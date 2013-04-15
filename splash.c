@@ -618,19 +618,14 @@ void fb_clear_screen(void) {
 void gc() {
 	int x, length, err;
 
-	if(child) {
+	if(child || INITIALIZED)  {
 		fb_clear_mem();
 		fb_clear_screen();
 		fb_cleanup();
 
 		munmap(addr, mlength);
-		close(fd);
-	
-		fclose(pid_file);
-		unlink(absMem);		
-		unlink(absPid);
 		close(fbfd);
-		rmdir("/run/splash");
+		while( close(fd) || fclose(pid_file) || unlink(absMem) || unlink(absPid) || rmdir("/run/splash") );
 
 		for(x=0;x<nrCachedFiles;x++) {
 			free(bytes[x]);
